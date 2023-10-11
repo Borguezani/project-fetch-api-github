@@ -38,16 +38,12 @@ const screen = {
     }
 
     let eventsItems = "";
-    user.events.forEach((events, index) => {
+    user.events.forEach((events) => {
       const eventName = events.repo.name;
       const eventsCommitMessage = events.payload.commits;
       let eventMessage = "";
-      if (eventsCommitMessage) {
-        eventMessage = `<p> ${eventsCommitMessage[0].message}</p>`;
-      } else {
-        eventMessage = `<p>EventCreate without description</p>`;
-      }
-      eventsItems += `<li><p><strong>${eventName}</strong> - ${user.processedEvents[index]}</p></li><hr>`;
+      eventsCommitMessage ? eventMessage = `PushEvent: ${eventsCommitMessage[0].message}` : eventMessage = `CreateEvent: ${events.payload.description ?? ' Without description'}`;
+      eventsItems += `<li><p><strong>${eventName}</strong> - ${eventMessage}</p></li><hr>`;
     });
     if (user.events.length > 0) {
       this.userProfile.innerHTML += `<div class="events section">
@@ -56,6 +52,7 @@ const screen = {
                                        </div>`;
     }
   },
+  
   renderNotFound() {
     this.userProfile.innerHTML = "<h3>Usuário não encontrado</h3>";
   },

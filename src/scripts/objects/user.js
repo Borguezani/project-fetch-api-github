@@ -7,7 +7,6 @@ const user = {
   following: "",
   repositories: [],
   events: [],
-  processedEvents: [],
   languages: [],
   setInfo(gitHubUser) {
     this.avatarUrl = gitHubUser.avatar_url;
@@ -21,37 +20,8 @@ const user = {
     this.repositories = repositories;
   },
   async setEvents(events) {
-    this.events = events;
-    await this.processingGitHubEvents(events);
-  },
-  async processingGitHubEvents(events) {
-    const processedEvents = [];
-    events.forEach((event) => {
-      console.log(event);
-      switch (event.type) {
-        case "PushEvent":
-          processedEvents.push(
-            `Push Event: ${event.payload.commits[0].message}`
-          );
-          break;
-        case "CreateEvent":
-          if (!event.payload.description) {
-            processedEvents.push(`Create Event: No description`);
-          } else {
-            processedEvents.push(`Create Event: ${event.payload.description}`);
-          }
-          break;
-        case "PublicEvent":
-          processedEvents.push(`Public Event: Public repository`);
-          break;
-        case "WatchEvent":
-          processedEvents.push(`Watch Event: Watching`);
-          break;
-        default:
-          processedEvents.push("Unknown event");
-      }
-    });
-    this.processedEvents = processedEvents;
+    const filteredEvents = events.filter(event => event.type === "CreateEvent" || event.type === "PushEvent")
+    this.events = filteredEvents;
   },
   setLanguage(languages) {
     this.languages = languages;
