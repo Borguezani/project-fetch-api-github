@@ -24,6 +24,7 @@ const screen = {
                                     </div>
                                   </div>`;
     let repositoriesItems = "";
+
     user.repositories.forEach((repo, index) => {
       repositoriesItems += `<li><a href="${repo.html_url}"target="_blank">${repo.name}</a>
                             <div class="repos-info">
@@ -42,7 +43,11 @@ const screen = {
       const eventName = events.repo.name;
       const eventsCommitMessage = events.payload.commits;
       let eventMessage = "";
-      eventsCommitMessage ? eventMessage = `PushEvent: ${eventsCommitMessage[0].message}` : eventMessage = `CreateEvent: ${events.payload.description ?? ' Without description'}`;
+      eventsCommitMessage
+        ? (eventMessage = `PushEvent: ${eventsCommitMessage[0].message}`)
+        : (eventMessage = `CreateEvent: ${
+            events.payload.description ?? " Without description"
+          }`);
       eventsItems += `<li><p><strong>${eventName}</strong> - ${eventMessage}</p></li><hr>`;
     });
     if (user.events.length > 0) {
@@ -52,9 +57,10 @@ const screen = {
                                        </div>`;
     }
   },
-  
+
   renderNotFound() {
     this.userProfile.innerHTML = "<h3>Usuário não encontrado</h3>";
   },
 };
+
 export { screen };
